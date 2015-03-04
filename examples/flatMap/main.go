@@ -10,8 +10,8 @@ func main() {
 	}
 }
 
-func gen() chan chan int {
-	out := make(chan chan int)
+func gen() <-chan (<-chan int) {
+	out := make(chan (<-chan int))
 	go func() {
 		defer close(out)
 		out <- intRange()
@@ -21,7 +21,7 @@ func gen() chan chan int {
 	return out
 }
 
-func intRange() chan int {
+func intRange() <-chan int {
 	out := make(chan int)
 	go func() {
 		defer close(out)
@@ -32,7 +32,7 @@ func intRange() chan int {
 	return out
 }
 
-func flatMap(in chan chan int) <-chan int {
+func flatMap(in <-chan (<-chan int)) <-chan int {
 	out := make(chan int)
 	go func() {
 		defer close(out)
