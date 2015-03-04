@@ -10,23 +10,33 @@ func main() {
 		input <- 2
 		input <- 3
 	}()
-	output := scan(input)
+  //go:generate pipeline scan([]int{}, lastTwo) as windowScan into window_scan.go
+	output := windowScan(input)
 	for o := range output {
 		fmt.Printf("%d\n", o)
 	}
 }
 
-// scan looks at the last two elements in a channel and produces a result from
-// them
-func scan(in <-chan int) <-chan int {
-	out := make(chan int)
-	go func() {
-		defer close(out)
-		last := <-in
-		for curr := range in {
-			out <- last + curr
-			last = curr
-		}
-	}()
-	return out
+// defined in the package to tell windowScan what types to deal with
+func lastTwo(acc []int, x int) []int {
+  acc = append(acc, x)
+  if len(acc) > 2 {
+    acc = acc[1:]
+  }
+  return acc
 }
+
+// automatically generated
+func windowScan(in <-chan int) <-chan []int {
+  out := make(chan []int)
+  go func() {
+    defer close(out)
+    acc := []int{}
+    for x := range in {
+      acc = lastTwo(acc, x)
+      out <- acc
+    }
+  }()
+  return out
+}
+
