@@ -34,6 +34,15 @@ func main() {
 			Timestamp: time.Now().Format("Jan 2, 2006 at 3:04pm (MST)"),
 			Version:   version,
 		})
+	case "cmap":
+		err = pipeline.RenderCMap(f, pipeline.CMapConfig{
+			Package:   *pkg,
+			FuncName:  *fn,
+			InType:    *in,
+			OutType:   *out,
+			Timestamp: time.Now().Format("Jan 2, 2006 at 3:04pm (MST)"),
+			Version:   version,
+		})
 	default:
 		log.Fatalf("unknown pipeliner type: %s", *name)
 	}
