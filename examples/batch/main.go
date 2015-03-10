@@ -6,6 +6,7 @@ import (
 )
 
 //go:generate pipeliner -name batch -fn batchString -in string -file batchString.go -package main
+// pipeliner batch(string)
 func main() {
 	input := make(chan string)
 	go func() {

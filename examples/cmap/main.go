@@ -12,6 +12,7 @@ func transform(in int) string {
 }
 
 //go:generate pipeliner -name cmap -fn cmapInt -in int -out string -package main -file cmapInt.go
+// pipeliner map(int) string concurrently
 func main() {
 	input := make(chan int)
 	go func() {
